@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: #0d0008;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    animation: floatUp linear infinite;
+    opacity: 0;
+    z-index: 1;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.9; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  .bg-glow {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 60%, rgba(180,10,60,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 30%, rgba(120,5,80,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 80%, rgba(200,20,80,0.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.1; }
+    50%       { opacity: 0.9; }
+  }
+
+  /* ── LANDING ── */
+  #landing {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    transition: opacity 1.4s ease, transform 1.4s ease;
+  }
+  #landing.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
+
+  .envelope {
+    font-size: 6rem;
+    margin-bottom: 1.8rem;
+    animation: pulse 2.2s ease-in-out infinite;
+    cursor: pointer;
+    display: block;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(220,50,100,0.6)); }
+    50%     { transform: scale(1.1);  filter: drop-shadow(0 0 45px rgba(220,50,100,1));   }
+  }
+
+  .landing-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #f8d7e3;
+    font-style: italic;
+    letter-spacing: .06em;
+    margin-bottom: .8rem;
+    text-shadow: 0 0 40px rgba(220,80,120,.5);
+  }
+  .landing-sub {
+    font-size: .85rem;
+    color: rgba(248,180,200,.6);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+
+  .open-btn {
+    background: linear-gradient(135deg,#7b0030,#b0003e,#7b0030);
+    border: 1px solid rgba(220,80,120,.5);
+    color: #fde8f0;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.15rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    padding: 1rem 3.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s, box-shadow .3s;
+    box-shadow: 0 0 30px rgba(180,0,60,.4), inset 0 1px 0 rgba(255,255,255,.1);
+  }
+  .open-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 55px rgba(220,0,80,.65), inset 0 1px 0 rgba(255,255,255,.2);
+  }
+
+  /* ── REVEAL ── */
+  #reveal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(.95);
+    transition: opacity 1.5s ease .5s, transform 1.5s ease .5s;
+    pointer-events: none;
+    padding: 2rem;
+    text-align: center;
+    z-index: 9;
+  }
+  #reveal.visible { opacity: 1; transform: scale(1); pointer-events: all; }
+
+  .quote {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    color: rgba(248,185,210,.88);
+    font-size: clamp(.95rem,2.5vw,1.2rem);
+    line-height: 2;
+    max-width: 500px;
+    margin-bottom: 2.2rem;
+    text-shadow: 0 0 20px rgba(200,60,100,.3);
+    animation: fadeUp 1s ease 1.3s both;
+  }
+  .divider {
+    width: 110px;
+    height: 1px;
+    background: linear-gradient(90deg,transparent,rgba(220,80,120,.7),transparent);
+    margin: 0 auto 2.2rem;
+    animation: fadeUp 1s ease 1.6s both;
+  }
+  .dedico {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1.3rem,3.5vw,1.9rem);
+    color: rgba(255,160,195,.95);
+    margin-bottom: 1.4rem;
+    letter-spacing: .06em;
+    text-shadow: 0 0 30px rgba(220,60,100,.5);
+    animation: fadeUp 1s ease 1.9s both;
+  }
+  .song-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem,5vw,3rem);
+    color: #f8d7e3;
+    font-weight: 700;
+    margin-bottom: .3rem;
+    text-shadow: 0 0 40px rgba(220,80,120,.7);
+    animation: fadeUp 1s ease 2.1s both;
+  }
+  .song-artist {
+    font-size: 1rem;
+    color: rgba(220,135,165,.8);
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    margin-bottom: 2.6rem;
+    animation: fadeUp 1s ease 2.3s both;
+  }
+
+  .spotify-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+    background: #1DB954;
+    color: #000;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    padding: .9rem 2.6rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform .3s, box-shadow .3s, background .3s;
+    box-shadow: 0 0 30px rgba(29,185,84,.4);
+    animation: fadeUp 1s ease 2.6s both;
+  }
+  .spotify-btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 55px rgba(29,185,84,.75);
+    background: #1ed760;
+  }
+  .spotify-btn svg { width: 24px; height: 24px; flex-shrink: 0; }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(22px); }
+    to   { opacity:1; transform:translateY(0);    }
+  }
+
+  .rose { position:fixed; font-size:1.6rem; opacity:.12; pointer-events:none; }
+  .rose:nth-child(1){top:4%;  left:4%;  transform:rotate(-20deg);}
+  .rose:nth-child(2){top:8%;  right:6%; transform:rotate(15deg);}
+  .rose:nth-child(3){bottom:7%;left:6%; transform:rotate(10deg);}
+  .rose:nth-child(4){bottom:4%;right:4%;transform:rotate(-25deg);}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="stars" id="stars"></div>
+
+<div class="rose">🌹</div>
+<div class="rose">🌹</div>
+<div class="rose">🌹</div>
+<div class="rose">🌹</div>
+
+<!-- LANDING -->
+<div id="landing">
+  <span class="envelope">💌</span>
+  <h1 class="landing-title">Hay algo para ti...</h1>
+  <p class="landing-sub">toca para abrirlo</p>
+  <button class="open-btn" onclick="openLetter()">✦ &nbsp; Abrir esto &nbsp; ✦</button>
+</div>
+
+<!-- REVEAL -->
+<div id="reveal">
+  <p class="quote">
+    "Hay canciones que no se eligen,<br>
+    simplemente llegan<br>
+    y te hacen pensar en alguien..."
+  </p>
+  <div class="divider"></div>
+  <p class="dedico">✦ &nbsp; Te la dedico &nbsp; ✦</p>
+  <h2 class="song-title">Te Encontré</h2>
+  <p class="song-artist">— Vega —</p>
+  <a class="spotify-btn"
+     href="https://open.spotify.com/intl-es/track/2kP6fOqdSQ5CYqVH5z5844?si=b0e67669996a4e30"
+     target="_blank">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+    </svg>
+    Escuchar en Spotify
+  </a>
+</div>
+
+<script>
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 90; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${1+Math.random()*2.5}px;height:${1+Math.random()*2.5}px;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*5}s;`;
+    starsEl.appendChild(s);
+  }
+
+  // Floating particles
+  const emojis = ['🌹','💕','✨','🌸','💫','❤️','🌺','💖'];
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.cssText = `left:${Math.random()*100}vw;font-size:${0.8+Math.random()*1.3}rem;animation-duration:${9+Math.random()*8}s;animation-delay:${Math.random()*3}s;`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 18000);
+  }
+  setInterval(spawnParticle, 1400);
+
+  function openLetter() {
+    const landing = document.getElementById('landing');
+    landing.classList.add('hidden');
+    for (let i = 0; i < 15; i++) setTimeout(spawnParticle, i * 80);
+    setTimeout(() => document.getElementById('reveal').classList.add('visible'), 700);
+  }
+</script>
+</body>
+</html>
